@@ -1,8 +1,14 @@
 <?php 
   include '../template/header.php'; 
   include_once("../connection.php");
-   
-  $dt_siswa = mysqli_query($mysqli, "SELECT * FROM siswa s JOIN kelas k ON s.id_kelas = k.id_kelas");
+  
+  $query = "SELECT * FROM siswa s JOIN kelas k ON s.id_kelas = k.id_kelas";
+  
+  $search = isset($_GET["search"]) ? $_GET["search"] : '';
+  if ($search != '') {
+    $query .= " WHERE nama_siswa LIKE '%".$search."%'";
+  }
+  $dt_siswa = mysqli_query($mysqli, $query);
   $dt_kelas = mysqli_query($mysqli, "SELECT * FROM kelas");
 ?>
 
@@ -25,10 +31,20 @@
       <div class="container-fluid">
         <!-- TABLE: LATEST ORDERS -->
             <div class="card">
-              <div class="card-header border-transparent">
+              <div class="card-header border-transparent row">
                 <!-- <h3 class="card-title">Latest Orders</h3> -->
+                <div class="input-group mb-3 col">
+                  <?php if ($search != ''): ?>
+                    <input type="text" class="form-control" placeholder="Search" id="searchBox" value="<?= $search ?>" aria-describedby="basic-addon2">
+                  <?php else: ?>
+                    <input type="text" class="form-control" placeholder="Search" id="searchBox" value="" aria-describedby="basic-addon2">
+                  <?php endif ?>
+                  <div class="input-group-append">
+                  <button type="button" onclick="searchbar()" class="btn btn-primary">Search</button>
+                  </div>
+                </div>
 
-                <div class="card-tools">
+                <div class="card-tools col d-flex justify-content-end">
                   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addModal">
                     Tambah Siswa
                   </button>
@@ -60,7 +76,15 @@
                           <td><?= $s["agama"] ?></td>
                           <td><?= $s["tingkat"] . " " . $s["jurusan"] ?></td>
                           <td>
-                            <a href="#" class="btn btn-primary btn-sm" role="button">
+                            <a onclick="update(
+                              `<?= $s['id_siswa']; ?>`,
+                              `<?= $s['nama_siswa']; ?>`, 
+                              `<?= $s['tempat_lahir']; ?>`,
+                              `<?= $s['tgl_lahir']; ?>`,
+                              `<?= $s['jkel']; ?>`,
+                              `<?= $s['agama']; ?>`,
+                              `<?= $s['id_kelas']; ?>`,
+                              )" class="btn btn-primary btn-sm" role="button">
                               <i class="fas fa-pencil-alt"></i>
                             </a>
                             <a href="delete_siswa.php?id=<?= $s["id_siswa"] ?>" class="btn btn-danger btn-sm" role="button">
@@ -134,5 +158,74 @@
       </form>
     </div>
   </div>
+
+  <!-- Modal Update -->
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form action="update_siswa.php" method="post" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tambah Siswa</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        <input class="form-control" type="hidden" name="idSiswa" id="idSiswa" placeholder="Masukkan nama siswa">
+          <div class="form-group">
+            <label for="namaUpdate">Nama Siswa</label>
+            <input class="form-control" type="text" name="namaUpdate" id="namaUpdate" placeholder="Masukkan nama siswa">
+          </div>
+          <div class="form-group">
+            <label for="tempatUpdate">Tempat Lahir</label>
+            <input class="form-control" type="text" name="tempatUpdate" id="tempatUpdate" placeholder="Masukkan tempat lahir">
+          </div>
+          <div class="form-group">
+            <label for="dateUpdate">Tanggal Lahir</label>
+            <input class="form-control" type="date" name="dateUpdate" id="dateUpdate" placeholder="Masukkan tanggal lahir">
+          </div>
+          <div class="form-group">
+            <label for="jkelUpdate">Jenis Kelamin</label>
+            <select class="form-control" name="jkelUpdate" id="jkelUpdate">
+              <option value="L">Laki - laki</option>
+              <option value="P">Perempuan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="agamaUpdate">Agama</label>
+            <input class="form-control" type="text" name="agamaUpdate" id="agamaUpdate" placeholder="Masukkan agama">
+          </div>
+          <div class="form-group">
+            <label for="kelasUpdate">Kelas</label>
+            <select class="form-control" name="kelasUpdate" id="kelasUpdate">
+              <?php foreach ($dt_kelas as $k) { ?>
+                <option value="<?= $k["id_kelas"]; ?>"><?= $k["tingkat"] . " " . $k["jurusan"] ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <input type="submit" name="Submit" class="btn btn-primary" value="Save"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  function update(idSiswa,namaUpdate,tempatUpdate,dateUpdate,jkelUpdate,agamaUpdate,kelasUpdate) {
+    $('#updateModal').modal('show');
+    $("#namaUpdate").val(namaUpdate);
+    $("#tempatUpdate").val(tempatUpdate);
+    $("#dateUpdate").val(dateUpdate);
+    $("#jkelUpdate").val(jkelUpdate);
+    $("#agamaUpdate").val(agamaUpdate);
+    $("#kelasUpdate").val(kelasUpdate);
+    $("#idSiswa").val(idSiswa);
+  }
+  
+  function searchbar() {
+    window.location.href = "/pelitajaya/siswa/data_siswa.php?search="+$("#searchBox").val();
+  }
+</script>
 
 <?php include '../template/footer.php'; ?>
