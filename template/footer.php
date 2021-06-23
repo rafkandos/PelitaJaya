@@ -46,6 +46,20 @@
       kelas.classList.remove("active");
       mapel.classList.remove("active");
     }
+    if (window.location.href.indexOf("data_kelas") > -1) {
+      dashboard.classList.remove("active");
+      siswa.classList.remove("active");
+      guru.classList.remove("active");
+      kelas.classList.add("active");
+      mapel.classList.remove("active");
+    }
+    if (window.location.href.indexOf("data_mapel") > -1) {
+      dashboard.classList.remove("active");
+      siswa.classList.remove("active");
+      guru.classList.remove("active");
+      kelas.classList.remove("active");
+      mapel.classList.add("active");
+    }
 
 </script>
 

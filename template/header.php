@@ -29,7 +29,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#" role="button">
+        <a class="nav-link" href="/pelitajaya/logout.php" role="button">
           <i class="fas fa-sign-out-alt"></i>
         </a>
       </li>
@@ -78,7 +78,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" id="kelasPage">
+            <a href="/pelitajaya/kelas/data_kelas.php" class="nav-link" id="kelasPage">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
                 Data Kelas
@@ -86,7 +86,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" id="mapelPage">
+            <a href="/pelitajaya/mapel/data_mapel.php" class="nav-link" id="mapelPage">
               <i class="nav-icon fas fa-tree"></i>
               <p>
                 Data Mapel

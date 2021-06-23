@@ -2,6 +2,12 @@
   include '../template/header.php'; 
   include_once("../connection.php");
   
+  session_start();
+  if(!isset($_SESSION['status'])){
+    //melakukan pengalihan
+    header("location:/pelitajaya/login.php");
+  } 
+  
   $query = "SELECT * FROM siswa s JOIN kelas k ON s.id_kelas = k.id_kelas";
   
   $search = isset($_GET["search"]) ? $_GET["search"] : '';

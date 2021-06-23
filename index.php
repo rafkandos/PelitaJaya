@@ -1,4 +1,18 @@
-<?php include 'template/header.php'; ?>
+<?php 
+  include 'template/header.php';
+  include 'connection.php';
+
+  session_start();
+  if(!isset($_SESSION['status'])){
+    //melakukan pengalihan
+    header("location:login.php");
+  } 
+
+  $total_siswa = mysqli_num_rows(mysqli_query($mysqli, "SELECT * from siswa"));
+  $total_guru = mysqli_num_rows(mysqli_query($mysqli, "SELECT * from guru"));
+  $total_kelas = mysqli_num_rows(mysqli_query($mysqli, "SELECT * from kelas"));
+  $total_mapel = mysqli_num_rows(mysqli_query($mysqli, "SELECT * from mapel"));
+?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -30,10 +44,9 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">CPU Traffic</span>
+                <span class="info-box-text">Jumlah Siswa</span>
                 <span class="info-box-number">
-                  10
-                  <small>%</small>
+                  <?= $total_siswa ?>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -46,8 +59,8 @@
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Likes</span>
-                <span class="info-box-number">41,410</span>
+                <span class="info-box-text">Jumlah Guru</span>
+                <span class="info-box-number"><?= $total_guru ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -63,8 +76,8 @@
               <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Sales</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-text">Jumlah Kelas</span>
+                <span class="info-box-number"><?= $total_kelas ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -76,8 +89,8 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">New Members</span>
-                <span class="info-box-number">2,000</span>
+                <span class="info-box-text">Jumlah Mapel</span>
+                <span class="info-box-number"><?= $total_mapel ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
