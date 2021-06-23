@@ -70,7 +70,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" id="guruPage">
+            <a href="/pelitajaya/guru/data_guru.php" class="nav-link" id="guruPage">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Data Guru

@@ -39,6 +39,13 @@
       kelas.classList.remove("active");
       mapel.classList.remove("active");
     }
+    if (window.location.href.indexOf("data_guru") > -1) {
+      dashboard.classList.remove("active");
+      siswa.classList.remove("active");
+      guru.classList.add("active");
+      kelas.classList.remove("active");
+      mapel.classList.remove("active");
+    }
 
 </script>
 

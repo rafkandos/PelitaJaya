@@ -2,14 +2,14 @@
   include '../template/header.php'; 
   include_once("../connection.php");
   
-  $query = "SELECT * FROM siswa s JOIN kelas k ON s.id_kelas = k.id_kelas";
+  $query = "SELECT * FROM guru s JOIN mapel k ON s.id_mapel = k.id_mapel";
   
   $search = isset($_GET["search"]) ? $_GET["search"] : '';
   if ($search != '') {
-    $query .= " WHERE nama_siswa LIKE '%".$search."%'";
+    $query .= " WHERE nama_guru LIKE '%".$search."%'";
   }
-  $dt_siswa = mysqli_query($mysqli, $query);
-  $dt_kelas = mysqli_query($mysqli, "SELECT * FROM kelas");
+  $dt_guru = mysqli_query($mysqli, $query);
+  $dt_mapel = mysqli_query($mysqli, "SELECT * FROM mapel");
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -19,7 +19,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Siswa</h1>
+            <h1 class="m-0">Data Guru</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -46,7 +46,7 @@
 
                 <div class="card-tools col d-flex justify-content-end">
                   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addModal">
-                    Tambah Siswa
+                    Tambah Guru
                   </button>
                 </div>
               </div>
@@ -57,37 +57,37 @@
                     <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nama Siswa</th>
+                      <th>Nama Guru</th>
                       <th>TTL</th>
                       <th>Jenis Kelamin</th>
                       <th>Agama</th>
-                      <th>Kelas</th>
+                      <th>Mapel</th>
                       <th>Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
                       <?php $i = 1; ?>
-                      <?php foreach ($dt_siswa as $s) { ?>
+                      <?php foreach ($dt_guru as $s) { ?>
                         <tr>
                           <td><?= $i; ?></td>
-                          <td><?= $s["nama_siswa"]; ?></td>
+                          <td><?= $s["nama_guru"]; ?></td>
                           <td><?= $s["tempat_lahir"] . ", " . date("d M Y", strtotime($s["tgl_lahir"])) ?></td>
                           <td><?= $s["jkel"] ?></td>
                           <td><?= $s["agama"] ?></td>
-                          <td><?= $s["tingkat"] . " " . $s["jurusan"] ?></td>
+                          <td><?= $s["nama_mapel"] ?></td>
                           <td>
                             <a onclick="update(
-                              `<?= $s['id_siswa']; ?>`,
-                              `<?= $s['nama_siswa']; ?>`, 
+                              `<?= $s['id_guru']; ?>`,
+                              `<?= $s['nama_guru']; ?>`, 
                               `<?= $s['tempat_lahir']; ?>`,
                               `<?= $s['tgl_lahir']; ?>`,
                               `<?= $s['jkel']; ?>`,
                               `<?= $s['agama']; ?>`,
-                              `<?= $s['id_kelas']; ?>`,
+                              `<?= $s['id_mapel']; ?>`
                               )" class="btn btn-primary btn-sm" role="button">
                               <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <a href="delete_siswa.php?id=<?= $s["id_siswa"] ?>" class="btn btn-danger btn-sm" role="button">
+                            <a href="delete_guru.php?id=<?= $s["id_guru"] ?>" class="btn btn-danger btn-sm" role="button">
                               <i class="fas fa-trash"></i>
                             </a>
                           </td>
@@ -111,17 +111,17 @@
   <!-- Modal Add -->
   <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form action="add_siswa.php" method="post" class="modal-content">
+      <form action="add_guru.php" method="post" class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Tambah Siswa</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Tambah guru</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="namaAdd">Nama Siswa</label>
-            <input class="form-control" type="text" name="namaAdd" id="namaAdd" placeholder="Masukkan nama siswa">
+            <label for="namaAdd">Nama guru</label>
+            <input class="form-control" type="text" name="namaAdd" id="namaAdd" placeholder="Masukkan nama guru">
           </div>
           <div class="form-group">
             <label for="tempatAdd">Tempat Lahir</label>
@@ -143,10 +143,10 @@
             <input class="form-control" type="text" name="agamaAdd" id="agamaAdd" placeholder="Masukkan agama">
           </div>
           <div class="form-group">
-            <label for="kelasAdd">Kelas</label>
-            <select class="form-control" name="kelasAdd" id="kelasAdd">
-              <?php foreach ($dt_kelas as $k) { ?>
-                <option value="<?= $k["id_kelas"]; ?>"><?= $k["tingkat"] . " " . $k["jurusan"] ?></option>
+            <label for="mapelAdd">Mapel</label>
+            <select class="form-control" name="mapelAdd" id="mapelAdd">
+              <?php foreach ($dt_mapel as $k) { ?>
+                <option value="<?= $k["id_mapel"]; ?>"><?= $k["nama_mapel"] ?></option>
               <?php } ?>
             </select>
           </div>
@@ -162,18 +162,18 @@
   <!-- Modal Update -->
   <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form action="update_siswa.php" method="post" class="modal-content">
+      <form action="update_guru.php" method="post" class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Tambah Siswa</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Tambah guru</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-        <input class="form-control" type="hidden" name="idSiswa" id="idSiswa" placeholder="Masukkan nama siswa">
+        <input class="form-control" type="hidden" name="idGuru" id="idGuru" placeholder="Masukkan nama guru">
           <div class="form-group">
-            <label for="namaUpdate">Nama Siswa</label>
-            <input class="form-control" type="text" name="namaUpdate" id="namaUpdate" placeholder="Masukkan nama siswa">
+            <label for="namaUpdate">Nama guru</label>
+            <input class="form-control" type="text" name="namaUpdate" id="namaUpdate" placeholder="Masukkan nama guru">
           </div>
           <div class="form-group">
             <label for="tempatUpdate">Tempat Lahir</label>
@@ -195,10 +195,10 @@
             <input class="form-control" type="text" name="agamaUpdate" id="agamaUpdate" placeholder="Masukkan agama">
           </div>
           <div class="form-group">
-            <label for="kelasUpdate">Kelas</label>
-            <select class="form-control" name="kelasUpdate" id="kelasUpdate">
-              <?php foreach ($dt_kelas as $k) { ?>
-                <option value="<?= $k["id_kelas"]; ?>"><?= $k["tingkat"] . " " . $k["jurusan"] ?></option>
+            <label for="mapelUpdate">Mapel</label>
+            <select class="form-control" name="mapelUpdate" id="mapelUpdate">
+              <?php foreach ($dt_mapel as $k) { ?>
+                <option value="<?= $k["id_mapel"]; ?>"><?= $k["nama_mapel"] ?></option>
               <?php } ?>
             </select>
           </div>
@@ -212,19 +212,19 @@
   </div>
 
 <script>
-  function update(idSiswa,namaUpdate,tempatUpdate,dateUpdate,jkelUpdate,agamaUpdate,kelasUpdate) {
+  function update(idSiswa,namaUpdate,tempatUpdate,dateUpdate,jkelUpdate,agamaUpdate,mapelUpdate) {
     $('#updateModal').modal('show');
     $("#namaUpdate").val(namaUpdate);
     $("#tempatUpdate").val(tempatUpdate);
     $("#dateUpdate").val(dateUpdate);
     $("#jkelUpdate").val(jkelUpdate);
     $("#agamaUpdate").val(agamaUpdate);
-    $("#kelasUpdate").val(kelasUpdate);
-    $("#idSiswa").val(idSiswa);
+    $("#mapelUpdate").val(mapelUpdate);
+    $("#idGuru").val(idSiswa);
   }
   
   function searchbar() {
-    window.location.href = "/pelitajaya/siswa/data_siswa.php?search="+$("#searchBox").val();
+    window.location.href = "/pelitajaya/guru/data_guru.php?search="+$("#searchBox").val();
   }
 </script>
 
