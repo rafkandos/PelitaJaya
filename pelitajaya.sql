@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 24 Jun 2021 pada 12.50
+-- Waktu pembuatan: 05 Jul 2021 pada 14.19
 -- Versi server: 10.4.19-MariaDB
 -- Versi PHP: 8.0.7
 
@@ -20,6 +20,134 @@ SET time_zone = "+00:00";
 --
 -- Database: `pelitajaya`
 --
+
+DELIMITER $$
+--
+-- Prosedur
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CekKurangDari10` (IN `input` INT, OUT `hasil` VARCHAR(50))  BEGIN
+	#Routine body goes here...
+	IF input < 10 THEN
+		SET hasil = 'Angka kurang dari 10';
+	ELSE 
+		SET hasil = 'Angka lebih dari 10';
+	END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckNumberOfMonth` (IN `input` INT, OUT `hasil` VARCHAR(50))  BEGIN
+	#Routine body goes here...
+	CASE input
+    WHEN 1 THEN
+      SET hasil = 'January';
+    WHEN 2 THEN
+      SET hasil = 'February';
+    WHEN 3 THEN
+      SET hasil = 'March';
+		WHEN 4 THEN
+      SET hasil = 'April';
+		WHEN 5 THEN
+      SET hasil = 'May';
+		WHEN 6 THEN
+      SET hasil = 'June';
+		WHEN 7 THEN
+      SET hasil = 'July';
+		WHEN 8 THEN
+      SET hasil = 'August';
+		WHEN 9 THEN
+      SET hasil = 'September';
+		WHEN 10 THEN
+      SET hasil = 'October';
+		WHEN 11 THEN
+      SET hasil = 'November';
+		WHEN 12 THEN
+      SET hasil = 'December';
+    ELSE
+      SET hasil = 'Invalid input number of month';
+  END CASE;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetSiswa` ()  BEGIN
+	#Routine body goes here...
+	SELECT * FROM siswa;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetTotalSiswa` ()  BEGIN
+	#Routine body goes here...
+	DECLARE totalSiswa INT(11) DEFAULT 0;
+	
+	SELECT COUNT(*) INTO totalSiswa FROM siswa;
+	SELECT totalSiswa;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `LuasPersegi` (OUT `luas` INT)  BEGIN
+	#Routine body goes here...
+	SELECT 7 * 7  INTO luas;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `LuasPersegiPanjang` (IN `panjang` INT, IN `lebar` INT, OUT `luas` INT)  BEGIN
+	#Routine body goes here...
+	SELECT (panjang * lebar) INTO luas;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Perkalian` (INOUT `angka` INT)  BEGIN
+	#Routine body goes here...
+	SELECT (angka * angka) INTO angka;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PerulanganLoop` (IN `batas` INT)  BEGIN
+	#Routine body goes here...
+	DECLARE i INT;
+  DECLARE hasil VARCHAR(20) DEFAULT '';
+  SET i = 1;
+  ulang: LOOP
+    IF i > batas THEN
+      LEAVE ulang;
+    END IF;
+    SET i = i + 1;
+    IF (i mod 2 = 0) THEN
+      ITERATE ulang;
+    ELSE
+      SET hasil = CONCAT(hasil, i, ' ');
+    END IF;
+  END LOOP;
+  SELECT hasil;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PerulanganRepeat` (IN `batas` INT)  BEGIN
+	#Routine body goes here...
+	DECLARE i INT;
+  DECLARE hasil VARCHAR(20) DEFAULT '';
+  SET i = 1;
+  REPEAT
+		IF (i mod 2 = 0) THEN
+			SET hasil = CONCAT(hasil, i, ' ');
+		END IF;
+    SET i = i + 1;
+    UNTIL i > batas
+  END REPEAT;
+  SELECT hasil;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PerulanganWhile` (IN `batas` INT)  BEGIN
+	#Routine body goes here...
+	DECLARE i INT;
+  DECLARE hasil VARCHAR(20) DEFAULT '';
+  SET i = 1;
+  WHILE i <= batas DO
+		IF (i mod 2) THEN
+			SET hasil = CONCAT(hasil, i, ' ');
+		END IF;
+    SET i = i + 1;
+  END WHILE;
+  SELECT hasil;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ProcedureName` ()  BEGIN
+	#Routine body goes here...
+	SELECT * FROM siswa;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
